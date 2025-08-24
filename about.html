@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Jharkhand Explorer</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --card-bg: #111111;
+      --accent: #ffffff;
+      --search-bg: #000000;
+      --search-text: #ffffff;
+      --search-border: #ffffff;
+    }
+    body.light {
+      --bg: #ffffff;
+      --text: #000000;
+      --card-bg: #f2f2f2;
+      --accent: #000000;
+      --search-bg: #ffffff;
+      --search-text: #000000;
+      --search-border: #000000;
+    }
+
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: "Poppins", sans-serif;
+      font-weight:700;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .4s, color .4s;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:15px 25px;
+      background:var(--card-bg);
+      position:sticky;top:0;z-index:1000;
+    }
+    .logo {
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:1px;
+      color:var(--accent);
+      text-transform:uppercase;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      width:35px;cursor:pointer;position:relative;height:25px;
+      display:flex;flex-direction:column;justify-content:space-between;
+    }
+    .hamburger span {
+      display:block;height:4px;width:100%;background:var(--accent);
+      border-radius:4px;transition:.4s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    .menu {
+      position:fixed;top:0;right:-100%;width:70%;height:100%;
+      background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;
+      transition:.4s ease;z-index:900;
+    }
+    .menu.active{right:0;}
+    .menu a{
+      color:var(--text);text-decoration:none;font-size:2rem;
+      margin:15px 0;font-weight:900;
+    }
+    .menu a:hover{color:gray;}
+    .theme-toggle {
+      margin-top:25px;padding:12px 25px;font-size:1rem;
+      border:none;border-radius:30px;cursor:pointer;
+      background:var(--accent);color:var(--bg);
+      font-weight:900;
+    }
+
+    /* About Page Specific Styles */
+    .about-header {
+      text-align:center;
+      padding:40px 20px;
+      background:var(--card-bg);
+      margin-bottom:30px;
+      border-bottom:3px solid var(--accent);
+    }
+    .about-header h1 {
+      font-size:3.5rem;
+      font-weight:900;
+      margin-bottom:15px;
+    }
+    .about-header p {
+      font-size:1.3rem;
+      font-weight:700;
+      opacity:0.9;
+    }
+
+    .about-content {
+      padding:0 6% 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .about-section {
+      margin-bottom:40px;
+    }
+    .about-section h2 {
+      font-size:2rem;
+      font-weight:900;
+      margin-bottom:20px;
+      color:var(--accent);
+      border-bottom:3px solid var(--accent);
+      padding-bottom:10px;
+      display:inline-block;
+    }
+    .about-section p {
+      font-size:1.1rem;
+      line-height:1.6;
+      margin-bottom:15px;
+    }
+
+    /* Profile Section */
+    .profile-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 30px 0;
+    }
+    @media (min-width: 768px) {
+      .profile-container {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+    }
+    .profile-image {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent);
+      margin-bottom: 20px;
+    }
+    @media (min-width: 768px) {
+      .profile-image {
+        margin-right: 40px;
+        margin-bottom: 0;
+      }
+    }
+    .profile-info {
+      flex: 1;
+    }
+    .profile-info h3 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: var(--accent);
+    }
+    .profile-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .detail-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 15px;
+      border: 2px solid var(--accent);
+    }
+    .detail-card h4 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    /* Skills Section */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .skill-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 20px;
+      border: 2px solid var(--accent);
+      text-align: center;
+    }
+    .skill-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: var(--accent);
+    }
+    .skill-level {
+      height: 20px;
+      background: #333;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .light .skill-level {
+      background: #ddd;
+    }
+    .skill-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 10px;
+    }
+    .html { width: 85%; }
+    .css { width: 80%; }
+    .js { width: 70%; }
+    .responsive { width: 75%; }
+
+    /* Contact Section */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .contact-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 20px;
+      border: 2px solid var(--accent);
+      text-align: center;
+    }
+    .contact-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: var(--accent);
+    }
+    .contact-card a {
+      color: var(--text);
+      text-decoration: none;
+      display: block;
+      margin: 10px 0;
+      font-size: 1.1rem;
+    }
+    .contact-card a:hover {
+      color: var(--accent);
+    }
+
+    footer {
+      text-align:center;padding:15px;background:var(--card-bg);
+      font-size:1rem;font-weight:700;
+      margin-top:auto;
+    }
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">JHARKHAND</div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <div class="menu" id="menu">
+    <a href="index.html">Home</a>
+    <a href="jharkhand.html">Jharkhand</a>
+    <a href="about.html">About</a>
+    <button class="theme-toggle" id="themeToggle">SWITCH THEME</button>
+  </div>
+
+  <section class="about-header">
+    <h1>ABOUT ME</h1>
+    <p>Creator of Jharkhand Explorer • Web Developer • From Deoghar</p>
+  </section>
+
+  <div class="about-content">
+    <section class="about-section">
+      <h2>WHO AM I</h2>
+      <p>Hello! I'm Anshu Rajhans, a passionate learner and web developer from Deoghar, Jharkhand. I created this Jharkhand Explorer website as a tribute to my home state and to showcase its rich cultural heritage, natural beauty, and historical significance.</p>
+      
+      <div class="profile-container">
+        <img src="anshu.jpg" alt="Anshu Rajhans" class="profile-image">
+        <div class="profile-info">
+          <h3>Anshu Rajhans</h3>
+          <p>I don't claim to be the best developer, but I have a genuine passion for coding and creating digital experiences that people find useful and engaging. My journey in web development started as a curiosity and has grown into a dedicated pursuit of knowledge and skill improvement.</p>
+          <p>When I'm not coding, I enjoy exploring the beautiful landscapes of Jharkhand, learning about tribal cultures, and continuously expanding my knowledge in technology.</p>
+          
+          <div class="profile-details">
+            <div class="detail-card">
+              <h4>Education</h4>
+              <p>Deoghar College, Deoghar</p>
+            </div>
+            <div class="detail-card">
+              <h4>Location</h4>
+              <p>Deoghar, Jharkhand</p>
+            </div>
+            <div class="detail-card">
+              <h4>Status</h4>
+              <p>Student & Learner</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <h2>MY SKILLS</h2>
+      <p>As a continuous learner, I'm constantly working to improve my skills in web development and design. Here's an overview of my current skill set:</p>
+      
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3>HTML</h3>
+          <div class="skill-level">
+            <div class="skill-fill html"></div>
+          </div>
+          <p>Creating structured, semantic web pages</p>
+        </div>
+        <div class="skill-card">
+          <h3>CSS</h3>
+          <div class="skill-level">
+            <div class="skill-fill css"></div>
+          </div>
+          <p>Styling with modern techniques and responsive design</p>
+        </div>
+        <div class="skill-card">
+          <h3>JavaScript</h3>
+          <div class="skill-level">
+            <div class="skill-fill js"></div>
+          </div>
+          <p>Adding interactivity and dynamic features</p>
+        </div>
+        <div class="skill-card">
+          <h3>Responsive Design</h3>
+          <div class="skill-level">
+            <div class="skill-fill responsive"></div>
+          </div>
+          <p>Creating mobile-friendly experiences</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <h2>ABOUT THIS PROJECT</h2>
+      <p>The Jharkhand Explorer website is a personal project born out of my love for my home state and my interest in web development. This website aims to:</p>
+      
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3>Showcase Jharkhand</h3>
+          <p>Highlight the beauty, culture, and heritage of Jharkhand to the world</p>
+        </div>
+        <div class="skill-card">
+          <h3>Promote Tourism</h3>
+          <p>Encourage visitors to explore Jharkhand's diverse attractions</p>
+        </div>
+        <div class="skill-card">
+          <h3>Educational Resource</h3>
+          <p>Provide comprehensive information about the state's history and geography</p>
+        </div>
+        <div class="skill-card">
+          <h3>Development Practice</h3>
+          <p>Apply and enhance my web development skills in a real project</p>
+        </div>
+      </div>
+      
+      <p>This website is built with pure HTML, CSS, and JavaScript without relying on any external frameworks, demonstrating the power of fundamental web technologies.</p>
+    </section>
+
+    <section class="about-section">
+      <h2>CONTACT ME</h2>
+      <p>I'm always open to connecting with fellow developers, learners, and anyone interested in Jharkhand's culture. Feel free to reach out to me through these channels:</p>
+      
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Email</h3>
+          <a href="mailto:vipwebff@gmail.com">vipwebff@gmail.com</a>
+        </div>
+        <div class="contact-card">
+          <h3>Instagram</h3>
+          <a href="https://instagram.com/zuxoai" target="_blank">@zuxoai</a>
+        </div>
+        <div class="contact-card">
+          <h3>Location</h3>
+          <p>Deoghar, Jharkhand</p>
+        </div>
+      </div>
+      
+      <p>I'm particularly interested in feedback on this website, collaboration opportunities, or discussions about web development and Jharkhand's rich cultural heritage.</p>
+    </section>
+
+    <section class="about-section">
+      <h2>FUTURE GOALS</h2>
+      <p>As I continue my journey in web development, I plan to:</p>
+      
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3>Learn Backend Development</h3>
+          <p>Expand my skills to include server-side programming and databases</p>
+        </div>
+        <div class="skill-card">
+          <h3>Explore Frameworks</h3>
+          <p>Learn popular frameworks like React and Vue.js</p>
+        </div>
+        <div class="skill-card">
+          <h3>Build More Projects</h3>
+          <p>Create additional websites and applications showcasing Jharkhand</p>
+        </div>
+        <div class="skill-card">
+          <h3>Contribute to Open Source</h3>
+          <p>Participate in open source projects related to regional development</p>
+        </div>
+      </div>
+      
+      <p>My ultimate goal is to become a full-stack developer capable of building complete, professional web applications that can make a positive impact, particularly in promoting and preserving the cultural heritage of regions like Jharkhand.</p>
+    </section>
+  </div>
+
+  <footer>
+    © 2025 Jharkhand Explorer · Created by Anshu Rajhans · Insta: <a href="https://instagram.com/zuxoai" target="_blank">@zuxoai</a>
+  </footer>
+
+  <script>
+    const burger=document.getElementById("hamburger");
+    const menu=document.getElementById("menu");
+    burger.addEventListener("click",()=>{
+      burger.classList.toggle("active");
+      menu.classList.toggle("active");
+    });
+    document.querySelectorAll(".menu a").forEach(link=>{
+      link.addEventListener("click",()=>{
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      });
+    });
+    document.addEventListener("click",(e)=>{
+      if(!menu.contains(e.target)&&!burger.contains(e.target)){
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      }
+    });
+    document.getElementById("themeToggle").addEventListener("click",()=>{
+      document.body.classList.toggle("light");
+    });
+  </script>
+</body>
+</html>

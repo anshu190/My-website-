@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deoghar - The Spiritual Abode</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --card-bg: #111111;
+      --accent: #ffffff;
+      --search-bg: #000000;
+      --search-text: #ffffff;
+      --search-border: #ffffff;
+    }
+    body.light {
+      --bg: #ffffff;
+      --text: #000000;
+      --card-bg: #f2f2f2;
+      --accent: #000000;
+      --search-bg: #ffffff;
+      --search-text: #000000;
+      --search-border: #000000;
+    }
+
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: "Poppins", sans-serif;
+      font-weight:700;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .4s, color .4s;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:15px 25px;
+      background:var(--card-bg);
+      position:sticky;top:0;z-index:1000;
+    }
+    .logo {
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:1px;
+      color:var(--accent);
+      text-transform:uppercase;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      width:35px;cursor:pointer;position:relative;height:25px;
+      display:flex;flex-direction:column;justify-content:space-between;
+    }
+    .hamburger span {
+      display:block;height:4px;width:100%;background:var(--accent);
+      border-radius:4px;transition:.4s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    .menu {
+      position:fixed;top:0;right:-100%;width:70%;height:100%;
+      background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;
+      transition:.4s ease;z-index:900;
+    }
+    .menu.active{right:0;}
+    .menu a{
+      color:var(--text);text-decoration:none;font-size:2rem;
+      margin:15px 0;font-weight:900;
+    }
+    .menu a:hover{color:gray;}
+    .theme-toggle {
+      margin-top:25px;padding:12px 25px;font-size:1rem;
+      border:none;border-radius:30px;cursor:pointer;
+      background:var(--accent);color:var(--bg);
+      font-weight:900;
+    }
+
+    /* State Page Specific Styles */
+    .state-header {
+      text-align:center;
+      padding:40px 20px;
+      background:var(--card-bg);
+      margin-bottom:30px;
+      border-bottom:3px solid var(--accent);
+    }
+    .state-header h1 {
+      font-size:3.5rem;
+      font-weight:900;
+      margin-bottom:15px;
+    }
+    .state-header p {
+      font-size:1.3rem;
+      font-weight:700;
+      opacity:0.9;
+    }
+
+    .state-content {
+      padding:0 6% 40px;
+    }
+    .state-section {
+      margin-bottom:40px;
+    }
+    .state-section h2 {
+      font-size:2rem;
+      font-weight:900;
+      margin-bottom:20px;
+      color:var(--accent);
+      border-bottom:3px solid var(--accent);
+      padding-bottom:10px;
+      display:inline-block;
+    }
+    .state-section p {
+      font-size:1.1rem;
+      line-height:1.6;
+      margin-bottom:15px;
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:20px;
+      margin:30px 0;
+    }
+    .gallery-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      overflow:hidden;
+      border:2px solid var(--accent);
+      transition:transform 0.3s;
+    }
+    .gallery-card:hover {
+      transform:scale(1.03);
+    }
+    .gallery-card img {
+      width:100%;
+      height:180px;
+      object-fit:cover;
+    }
+    .gallery-card p {
+      padding:15px;
+      font-size:0.9rem;
+      text-align:center;
+    }
+
+    .highlights-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:20px;
+      margin-top:20px;
+    }
+    .highlight-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      padding:20px;
+      border:2px solid var(--accent);
+    }
+    .highlight-card h3 {
+      font-size:1.3rem;
+      margin-bottom:10px;
+      color:var(--accent);
+    }
+
+    /* Timeline Fix for Mobile View */
+    .timeline {
+      position:relative;
+      max-width:1200px;
+      margin:40px auto;
+    }
+    .timeline::after {
+      content:'';
+      position:absolute;
+      width:6px;
+      background:var(--accent);
+      top:0;
+      bottom:0;
+      left:50%;
+      margin-left:-3px;
+    }
+    .timeline-item {
+      padding:10px 40px;
+      position:relative;
+      width:50%;
+      box-sizing:border-box;
+    }
+    .timeline-item::after {
+      content:'';
+      position:absolute;
+      width:25px;
+      height:25px;
+      background:var(--card-bg);
+      border:4px solid var(--accent);
+      border-radius:50%;
+      top:15px;
+      z-index:1;
+    }
+    .left {
+      left:0;
+    }
+    .right {
+      left:50%;
+    }
+    .left::after {
+      right:-12px;
+    }
+    .right::after {
+      left:-12px;
+    }
+    .timeline-content {
+      padding:20px 30px;
+      background:var(--card-bg);
+      border:2px solid var(--accent);
+      border-radius:10px;
+    }
+    .timeline-content h3 {
+      margin-bottom:10px;
+      color:var(--accent);
+    }
+
+    /* Mobile Timeline Fix */
+    @media screen and (max-width: 768px) {
+      .timeline::after {
+        left: 31px;
+      }
+      .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+      }
+      .timeline-item::after {
+        left: 18px;
+      }
+      .left, .right {
+        left: 0;
+      }
+    }
+
+    .districts-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+      gap:15px;
+      margin-top:20px;
+    }
+    .district-card {
+      background:var(--card-bg);
+      border-radius:10px;
+      padding:15px;
+      border:2px solid var(--accent);
+      text-align:center;
+      transition:transform 0.3s;
+    }
+    .district-card:hover {
+      transform:translateY(-5px);
+    }
+    .district-card h3 {
+      font-size:1.1rem;
+      margin-bottom:5px;
+      color:var(--accent);
+    }
+
+    footer {
+      text-align:center;padding:15px;background:var(--card-bg);
+      font-size:1rem;font-weight:700;
+      margin-top:auto;
+    }
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">DEOGHAR</div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <div class="menu" id="menu">
+    <a href="index.html">Home</a>
+    <a href="jharkhand.html">Jharkhand</a>
+    <a href="about.html">About</a>
+    <button class="theme-toggle" id="themeToggle">SWITCH THEME</button>
+  </div>
+
+  <section class="state-header">
+    <h1>DEOGHAR</h1>
+    <p>The Spiritual Abode • City of Temples</p>
+  </section>
+
+  <div class="state-content">
+    <section class="state-section">
+      <h2>INTRODUCTION</h2>
+      <p>Deoghar, meaning "Abode of the Gods", is a sacred Hindu city in the Jharkhand state of India. It is one of the twelve Jyotirlingas sites and home to the famous Baidyanath Temple, one of the most important Shiva temples in India. Millions of pilgrims visit Deoghar annually, especially during the holy month of Shravan.</p>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/Fs1MYLBT/image.jpg" alt="Baidyanath Temple">
+          <p>Baidyanath Temple - The Main Jyotirlinga</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/CKCt3HRx/image.jpg" alt="Deoghar City View">
+          <p>Panoramic view of Deoghar city</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/C526GcQm/image.jpg" alt="Naulakha Temple">
+          <p>Naulakha Temple - Architectural Marvel</p>
+        </div>
+      </div>
+
+      <p>Located in the eastern part of Jharkhand, Deoghar serves as the headquarters of the Deoghar District. The city combines spiritual significance with natural beauty, surrounded by lush forests and rolling hills. Beyond its religious importance, Deoghar is also emerging as an educational hub with several prestigious institutions.</p>
+    </section>
+
+    <section class="state-section">
+      <h2>GEOGRAPHY & CLIMATE</h2>
+      <p>Deoghar is situated at an average elevation of 254 meters above sea level in the Chota Nagpur Plateau region. The city is characterized by its hilly terrain and is surrounded by forests.</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>AREA</h3>
+          <p>Deoghar city covers 64.5 sq km with district area of 2,479 sq km</p>
+        </div>
+        <div class="highlight-card">
+          <h3>ELEVATION</h3>
+          <p>254 meters above sea level</p>
+        </div>
+        <div class="highlight-card">
+          <h3>RIVER</h3>
+          <p>Located near the Ajay River basin</p>
+        </div>
+        <div class="highlight-card">
+          <h3>CLIMATE</h3>
+          <p>Humid subtropical climate with hot summers (April-June), monsoon rains (July-September), and mild winters (November-February)</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>RELIGIOUS SIGNIFICANCE</h2>
+      <p>Deoghar is one of the most important pilgrimage sites for Hindus, particularly Shaivites:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>BAIDYANATH DHAM</h3>
+          <p>One of the twelve Jyotirlingas in India, believed to be where Ravana offered his ten heads to Shiva</p>
+        </div>
+        <div class="highlight-card">
+          <h3>SHRAVAN MELA</h3>
+          <p>Month-long pilgrimage where devotees carry holy water from Ganga at Sultanganj to offer at Baidyanath Temple</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TEMPLE COMPLEX</h3>
+          <p>Contains 21 additional temples including Parvati Temple, Ganesh Temple, and Kal Bhairav Temple</p>
+        </div>
+        <div class="highlight-card">
+          <h3>MYTHOLOGICAL CONNECTION</h3>
+          <p>Believed to be where Shiva descended as a healer (Vaidya) to cure Ravana's injuries</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>TOURIST ATTRACTIONS</h2>
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>NAULAKHA MANDIR</h3>
+          <p>19th century temple dedicated to Radha-Krishna, built at a cost of ₹9 lakhs (hence the name)</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TAPOVAN</h3>
+          <p>Beautiful park and cave complex believed to be where Ravana meditated to please Shiva</p>
+        </div>
+        <div class="highlight-card">
+          <h3>SATSANGA ASHRAM</h3>
+          <p>Spiritual center founded by Sri Sri Thakur Anukul Chandra, known for its peaceful environment</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TRIPUNDI TALA</h3>
+          <p>Sacred cremation ground mentioned in ancient texts, located near the main temple</p>
+        </div>
+        <div class="highlight-card">
+          <h3>RAMAKRISHNA MISSION ASHRAM</h3>
+          <p>Spiritual and educational center promoting Vedanta philosophy</p>
+        </div>
+        <div class="highlight-card">
+          <h3>HARILA JORI</h3>
+          <p>Picturesque spot where two mountain streams meet, creating a beautiful natural setting</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>CULTURE & FESTIVALS</h2>
+      <p>Deoghar's culture is deeply intertwined with its religious significance:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>SHRAVANI MELA</h3>
+          <p>July-August pilgrimage attracting 7-8 million devotees who walk 105 km from Sultanganj</p>
+        </div>
+        <div class="highlight-card">
+          <h3>MAHASHIVRATRI</h3>
+          <p>Grand celebration at Baidyanath Temple with special prayers and rituals</p>
+        </div>
+        <div class="highlight-card">
+          <h3>DURGA PUJA</h3>
+          <p>Celebrated with great enthusiasm like other parts of Bengal and Jharkhand</p>
+        </div>
+        <div class="highlight-card">
+          <h3>LOCAL CUISINE</h3>
+          <p>Famous for traditional sweets like Tilkut, Kachori, and regional delicacies</p>
+        </div>
+      </div>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/J0SPDGsF/image.jpg" alt="Shravan Mela">
+          <p>Kanwarias during Shravan Mela carrying holy water</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/CxGm5MSv/image.jpg" alt="Deoghar Culture">
+          <p>Traditional cultural performance</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>EDUCATION & INSTITUTIONS</h2>
+      <p>Deoghar has emerged as an educational hub with several prestigious institutions:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>ALLEN CARRER INSTITUTE</h3>
+          <p>Premier coaching institute for engineering and medical entrance exams</p>
+        </div>
+        <div class="highlight-card">
+          <h3>DEV SANGHA VIKAS COLLEGE</h3>
+          <p>Established institution offering various undergraduate and postgraduate courses</p>
+        </div>
+        <div class="highlight-card">
+          <h3>AYURVEDIC COLLEGE</h3>
+          <p>Institution dedicated to traditional Indian medicine and healing practices</p>
+        </div>
+        <div class="highlight-card">
+          <h3>GURU NANAK PUBLIC SCHOOL</h3>
+          <p>Reputed CBSE affiliated school providing quality education</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>HISTORICAL TIMELINE</h2>
+      <div class="timeline">
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Ancient Times</h3>
+            <p>Mentioned in Hindu scriptures as one of the sacred Jyotirlinga sites</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>8th Century</h3>
+            <p>References to Baidyanath Dham in ancient texts and inscriptions</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>1596</h3>
+            <p>First historical record of temple by Hindu King Puran Mal</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>18th Century</h3>
+            <p>Raja of Gidhaur builds and renovates parts of the temple complex</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>1885</h3>
+            <p>Construction of Naulakha Temple by Queen Charushila of Pathuria Ghat</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>1939</h3>
+            <p>Establishment of Ramakrishna Mission Ashram in Deoghar</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>15 November 2000</h3>
+            <p>Deoghar becomes part of the new state of Jharkhand</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>2022</h3>
+            <p>Deoghar awarded city status and becomes a municipal corporation</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>TRANSPORT & CONNECTIVITY</h2>
+      <p>Deoghar is well-connected by various modes of transportation:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>DEOGHAR AIRPORT</h3>
+          <p>Newly constructed airport with flights to major cities like Kolkata, Patna, and Delhi</p>
+        </div>
+        <div class="highlight-card">
+          <h3>RAILWAYS</h3>
+          <p>Jasidih Junction (20 km away) is the nearest major railway station with good connectivity</p>
+        </div>
+        <div class="highlight-card">
+          <h3>ROADWAYS</h3>
+          <p>Well-connected by NH114A and state highways to major cities like Patna, Ranchi, and Kolkata</p>
+        </div>
+        <div class="highlight-card">
+          <h3>LOCAL TRANSPORT</h3>
+          <p>Auto-rickshaws, cycle-rickshaws, and taxis available for local commute</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>ACCOMMODATION & FACILITIES</h2>
+      <p>Deoghar offers various accommodation options for pilgrims and tourists:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>DHARAMSHALAS</h3>
+          <p>Numerous budget accommodations operated by religious trusts and organizations</p>
+        </div>
+        <div class="highlight-card">
+          <h3>HOTELS</h3>
+          <p>Range of options from budget to mid-range hotels near temple areas</p>
+        </div>
+        <div class="highlight-card">
+          <h3>GUEST HOUSES</h3>
+          <p>Government and private guest houses offering comfortable stays</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TOURIST FACILITIES</h3>
+          <p>Information centers, guided tours, and pilgrimage assistance services</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    © 2025 Deoghar Explorer · Insta: <a href="https://instagram.com/zuxoai" target="_blank">@zuxoai</a>
+  </footer>
+
+  <script>
+    const burger=document.getElementById("hamburger");
+    const menu=document.getElementById("menu");
+    burger.addEventListener("click",()=>{
+      burger.classList.toggle("active");
+      menu.classList.toggle("active");
+    });
+    document.querySelectorAll(".menu a").forEach(link=>{
+      link.addEventListener("click",()=>{
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      });
+    });
+    document.addEventListener("click",(e)=>{
+      if(!menu.contains(e.target)&&!burger.contains(e.target)){
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      }
+    });
+    document.getElementById("themeToggle").addEventListener("click",()=>{
+      document.body.classList.toggle("light");
+    });
+  </script>
+</body>
+</html>

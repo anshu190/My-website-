@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dumka - The Santhal Paradise</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --card-bg: #111111;
+      --accent: #ffffff;
+      --search-bg: #000000;
+      --search-text: #ffffff;
+      --search-border: #ffffff;
+    }
+    body.light {
+      --bg: #ffffff;
+      --text: #000000;
+      --card-bg: #f2f2f2;
+      --accent: #000000;
+      --search-bg: #ffffff;
+      --search-text: #000000;
+      --search-border: #000000;
+    }
+
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: "Poppins", sans-serif;
+      font-weight:700;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .4s, color .4s;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:15px 25px;
+      background:var(--card-bg);
+      position:sticky;top:0;z-index:1000;
+    }
+    .logo {
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:1px;
+      color:var(--accent);
+      text-transform:uppercase;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      width:35px;cursor:pointer;position:relative;height:25px;
+      display:flex;flex-direction:column;justify-content:space-between;
+    }
+    .hamburger span {
+      display:block;height:4px;width:100%;background:var(--accent);
+      border-radius:4px;transition:.4s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    .menu {
+      position:fixed;top:0;right:-100%;width:70%;height:100%;
+      background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;
+      transition:.4s ease;z-index:900;
+    }
+    .menu.active{right:0;}
+    .menu a{
+      color:var(--text);text-decoration:none;font-size:2rem;
+      margin:15px 0;font-weight:900;
+    }
+    .menu a:hover{color:gray;}
+    .theme-toggle {
+      margin-top:25px;padding:12px 25px;font-size:1rem;
+      border:none;border-radius:30px;cursor:pointer;
+      background:var(--accent);color:var(--bg);
+      font-weight:900;
+    }
+
+    /* State Page Specific Styles */
+    .state-header {
+      text-align:center;
+      padding:40px 20px;
+      background:var(--card-bg);
+      margin-bottom:30px;
+      border-bottom:3px solid var(--accent);
+    }
+    .state-header h1 {
+      font-size:3.5rem;
+      font-weight:900;
+      margin-bottom:15px;
+    }
+    .state-header p {
+      font-size:1.3rem;
+      font-weight:700;
+      opacity:0.9;
+    }
+
+    .state-content {
+      padding:0 6% 40px;
+    }
+    .state-section {
+      margin-bottom:40px;
+    }
+    .state-section h2 {
+      font-size:2rem;
+      font-weight:900;
+      margin-bottom:20px;
+      color:var(--accent);
+      border-bottom:3px solid var(--accent);
+      padding-bottom:10px;
+      display:inline-block;
+    }
+    .state-section p {
+      font-size:1.1rem;
+      line-height:1.6;
+      margin-bottom:15px;
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:20px;
+      margin:30px 0;
+    }
+    .gallery-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      overflow:hidden;
+      border:2px solid var(--accent);
+      transition:transform 0.3s;
+    }
+    .gallery-card:hover {
+      transform:scale(1.03);
+    }
+    .gallery-card img {
+      width:100%;
+      height:180px;
+      object-fit:cover;
+    }
+    .gallery-card p {
+      padding:15px;
+      font-size:0.9rem;
+      text-align:center;
+    }
+
+    .highlights-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:20px;
+      margin-top:20px;
+    }
+    .highlight-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      padding:20px;
+      border:2px solid var(--accent);
+    }
+    .highlight-card h3 {
+      font-size:1.3rem;
+      margin-bottom:10px;
+      color:var(--accent);
+    }
+
+    /* Timeline Fix for Mobile View */
+    .timeline {
+      position:relative;
+      max-width:1200px;
+      margin:40px auto;
+    }
+    .timeline::after {
+      content:'';
+      position:absolute;
+      width:6px;
+      background:var(--accent);
+      top:0;
+      bottom:0;
+      left:50%;
+      margin-left:-3px;
+    }
+    .timeline-item {
+      padding:10px 40px;
+      position:relative;
+      width:50%;
+      box-sizing:border-box;
+    }
+    .timeline-item::after {
+      content:'';
+      position:absolute;
+      width:25px;
+      height:25px;
+      background:var(--card-bg);
+      border:4px solid var(--accent);
+      border-radius:50%;
+      top:15px;
+      z-index:1;
+    }
+    .left {
+      left:0;
+    }
+    .right {
+      left:50%;
+    }
+    .left::after {
+      right:-12px;
+    }
+    .right::after {
+      left:-12px;
+    }
+    .timeline-content {
+      padding:20px 30px;
+      background:var(--card-bg);
+      border:2px solid var(--accent);
+      border-radius:10px;
+    }
+    .timeline-content h3 {
+      margin-bottom:10px;
+      color:var(--accent);
+    }
+
+    /* Mobile Timeline Fix */
+    @media screen and (max-width: 768px) {
+      .timeline::after {
+        left: 31px;
+      }
+      .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+      }
+      .timeline-item::after {
+        left: 18px;
+      }
+      .left, .right {
+        left: 0;
+      }
+    }
+
+    .districts-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+      gap:15px;
+      margin-top:20px;
+    }
+    .district-card {
+      background:var(--card-bg);
+      border-radius:10px;
+      padding:15px;
+      border:2px solid var(--accent);
+      text-align:center;
+      transition:transform 0.3s;
+    }
+    .district-card:hover {
+      transform:translateY(-5px);
+    }
+    .district-card h3 {
+      font-size:1.1rem;
+      margin-bottom:5px;
+      color:var(--accent);
+    }
+
+    footer {
+      text-align:center;padding:15px;background:var(--card-bg);
+      font-size:1rem;font-weight:700;
+      margin-top:auto;
+    }
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">DUMKA</div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <div class="menu" id="menu">
+    <a href="index.html">Home</a>
+    <a href="jharkhand.html">Jharkhand</a>
+    <a href="about.html">About</a>
+    <button class="theme-toggle" id="themeToggle">SWITCH THEME</button>
+  </div>
+
+  <section class="state-header">
+    <h1>DUMKA</h1>
+    <p>The Santhal Paradise • Cultural Heart of Jharkhand</p>
+  </section>
+
+  <div class="state-content">
+    <section class="state-section">
+      <h2>INTRODUCTION</h2>
+      <p>Dumka, known as the "Santhal Paradise", is the sub-capital of Jharkhand and headquarters of the Dumka District. Nestled amidst the picturesque hills of the Chota Nagpur Plateau, Dumka is renowned for its rich tribal culture, scenic beauty, and historical significance. The city serves as an important cultural and administrative center in the Santal Pargana region.</p>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/8CJqQ8s3/dumka-landscape.jpg" alt="Dumka Landscape">
+          <p>Panoramic view of Dumka's beautiful landscape</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/8zYhJ3WX/santhal-culture.jpg" alt="Santhal Culture">
+          <p>Vibrant Santhal tribal culture</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/8CJqQ8s3/masanjore-dam.jpg" alt="Masanjore Dam">
+          <p>Masanjore Dam - Scenic attraction near Dumka</p>
+        </div>
+      </div>
+
+      <p>Located on the banks of the Mayurakshi River, Dumka offers a perfect blend of natural beauty and cultural heritage. The city is predominantly inhabited by Santhal tribes, who have preserved their unique traditions, art forms, and way of life. Dumka's tranquil environment and pleasant climate make it an ideal destination for those seeking peace away from bustling city life.</p>
+    </section>
+
+    <section class="state-section">
+      <h2>GEOGRAPHY & CLIMATE</h2>
+      <p>Dumka is situated in the northeastern part of the Chota Nagpur Plateau, characterized by undulating terrain, lush forests, and numerous rivers and streams.</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>AREA</h3>
+          <p>Dumka city covers 27.45 sq km with district area of 3,716 sq km</p>
+        </div>
+        <div class="highlight-card">
+          <h3>ELEVATION</h3>
+          <p>137 meters above sea level</p>
+        </div>
+        <div class="highlight-card">
+          <h3>RIVERS</h3>
+          <p>Mayurakshi, Mohana, and Pathro are the main rivers flowing through the region</p>
+        </div>
+        <div class="highlight-card">
+          <h3>CLIMATE</h3>
+          <p>Humid subtropical climate with hot summers (March-June), monsoon rains (July-September), and pleasant winters (November-February)</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>CULTURAL SIGNIFICANCE</h2>
+      <p>Dumka is the cultural heartland of the Santhal tribal community, known for its rich traditions:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>SANTHAL CULTURE</h3>
+          <p>Center of Santhal tribal traditions, music, dance, and art forms</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TRADITIONAL MUSIC</h3>
+          <p>Famous for traditional instruments like Tamak, Tumdak, and Banam</p>
+        </div>
+        <div class="highlight-card">
+          <h3>INDIGENOUS ART</h3>
+          <p>Known for Santhal paintings, terracotta works, and wooden crafts</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TRIBAL FAIRS</h3>
+          <p>Hosts numerous tribal festivals and fairs throughout the year</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>TOURIST ATTRACTIONS</h2>
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>BABA BASUKINATH DHAM</h3>
+          <p>Famous Shiva temple and important pilgrimage site, especially during Shravan month</p>
+        </div>
+        <div class="highlight-card">
+          <h3>MALOOTI MANDIR</h3>
+          <p>Ancient temple dedicated to Goddess Kali, located atop a hill with panoramic views</p>
+        </div>
+        <div class="highlight-card">
+          <h3>MASANJORE DAM</h3>
+          <p>Picturesque dam on the Mayurakshi River, ideal for picnics and photography</p>
+        </div>
+        <div class="highlight-card">
+          <h3>DHERMASTHANA</h3>
+          <p>Religious site with temples dedicated to various deities</p>
+        </div>
+        <div class="highlight-card">
+          <h3>KUMARGRAM</h3>
+          <p>Historical site with connections to the royal family of Pakur</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TATTAPANI HOT SPRING</h3>
+          <p>Natural hot water spring believed to have medicinal properties</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>CULTURE & FESTIVALS</h2>
+      <p>Dumka's culture is a vibrant tapestry of tribal traditions and local customs:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>SOHRAE FESTIVAL</h3>
+          <p>Major Santhal harvest festival celebrated with dance, music, and traditional rituals</p>
+        </div>
+        <div class="highlight-card">
+          <h3>KARAM FESTIVAL</h3>
+          <p>Important tribal festival dedicated to Karam Devta, celebrated with dance and offerings</p>
+        </div>
+        <div class="highlight-card">
+          <h3>BASAKI MELA</h3>
+          <p>Religious fair at Basukinath Temple attracting thousands of devotees</p>
+        </div>
+        <div class="highlight-card">
+          <h3>LOCAL CUISINE</h3>
+          <p>Famous for traditional tribal food like Handia, Rice Beer, and various forest produce dishes</p>
+        </div>
+      </div>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/8zYhJ3WX/sohrae-festival.jpg" alt="Sohrae Festival">
+          <p>Santhal tribe celebrating Sohrae festival</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/8CJqQ8s3/santhal-dance.jpg" alt="Santhal Dance">
+          <p>Traditional Santhal dance performance</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>EDUCATION & INSTITUTIONS</h2>
+      <p>Dumka has developed as an educational center with several important institutions:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>SIDO KANHU MURMU UNIVERSITY</h3>
+          <p>Premier university named after Santhal rebellion leaders, offering various courses</p>
+        </div>
+        <div class="highlight-card">
+          <h3>ALL INDIA INSTITUTE OF MEDICAL SCIENCES (AIIMS)</h3>
+          <p>Under-construction premier medical institute</p>
+        </div>
+        <div class="highlight-card">
+          <h3>GOVERNMENT ENGINEERING COLLEGE</h3>
+          <p>Technical education institute offering engineering courses</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TRIBAL RESEARCH INSTITUTE</h3>
+          <p>Center for study and preservation of tribal culture and traditions</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>HISTORICAL TIMELINE</h2>
+      <div class="timeline">
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Ancient Times</h3>
+            <p>Region inhabited by Santhal tribes with their distinct culture and governance</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>18th Century</h3>
+            <p>Came under British control and became part of the Santal Parganas district</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>1855-1856</h3>
+            <p>Santhal Rebellion (Hul) led by Sido and Kanhu Murmu against British oppression</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>1920s</h3>
+            <p>Development of administrative infrastructure during British rule</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>1983</h3>
+            <p>Dumka became a separate district carved out from the Santal Parganas</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>15 November 2000</h3>
+            <p>Dumka became part of the new state of Jharkhand</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>2011</h3>
+            <p>Declared as the sub-capital of Jharkhand</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>2019</h3>
+            <p>Foundation laid for AIIMS Dumka, boosting healthcare infrastructure</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>TRANSPORT & CONNECTIVITY</h2>
+      <p>Dumka is well-connected by road, with improving rail and air connectivity:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>ROADWAYS</h3>
+          <p>Well-connected by NH133 and state highways to major cities like Bhagalpur, Deoghar, and Ranchi</p>
+        </div>
+        <div class="highlight-card">
+          <h3>RAILWAYS</h3>
+          <p>Dumka Railway Station connected to Jasidih, Bhagalpur, and other cities through newly laid tracks</p>
+        </div>
+        <div class="highlight-card">
+          <h3>AIRPORT</h3>
+          <p>Deoghar Airport (approximately 50 km away) is the nearest airport with regular flights</p>
+        </div>
+        <div class="highlight-card">
+          <h3>LOCAL TRANSPORT</h3>
+          <p>Auto-rickshaws, cycle-rickshaws, and taxis available for local commute</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>ACCOMMODATION & FACILITIES</h2>
+      <p>Dumka offers various accommodation options for visitors:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>HOTELS</h3>
+          <p>Range of budget and mid-range hotels in the city center</p>
+        </div>
+        <div class="highlight-card">
+          <h3>GUEST HOUSES</h3>
+          <p>Government and private guest houses offering comfortable stays</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TOURIST REST HOUSES</h3>
+          <p>Jharkhand Tourism development corporation properties at key locations</p>
+        </div>
+        <div class="highlight-card">
+          <h3>HOMESTAYS</h3>
+          <p>Emerging homestay options offering cultural immersion experiences</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    © 2025 Dumka Explorer · Insta: <a href="https://instagram.com/zuxoai" target="_blank">@zuxoai</a>
+  </footer>
+
+  <script>
+    const burger=document.getElementById("hamburger");
+    const menu=document.getElementById("menu");
+    burger.addEventListener("click",()=>{
+      burger.classList.toggle("active");
+      menu.classList.toggle("active");
+    });
+    document.querySelectorAll(".menu a").forEach(link=>{
+      link.addEventListener("click",()=>{
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      });
+    });
+    document.addEventListener("click",(e)=>{
+      if(!menu.contains(e.target)&&!burger.contains(e.target)){
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      }
+    });
+    document.getElementById("themeToggle").addEventListener("click",()=>{
+      document.body.classList.toggle("light");
+    });
+  </script>
+</body>
+</html>

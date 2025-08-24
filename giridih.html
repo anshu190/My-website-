@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giridih - The Land of Hills</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --card-bg: #111111;
+      --accent: #ffffff;
+      --search-bg: #000000;
+      --search-text: #ffffff;
+      --search-border: #ffffff;
+    }
+    body.light {
+      --bg: #ffffff;
+      --text: #000000;
+      --card-bg: #f2f2f2;
+      --accent: #000000;
+      --search-bg: #ffffff;
+      --search-text: #000000;
+      --search-border: #000000;
+    }
+
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: "Poppins", sans-serif;
+      font-weight:700;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .4s, color .4s;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:15px 25px;
+      background:var(--card-bg);
+      position:sticky;top:0;z-index:1000;
+    }
+    .logo {
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:1px;
+      color:var(--accent);
+      text-transform:uppercase;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      width:35px;cursor:pointer;position:relative;height:25px;
+      display:flex;flex-direction:column;justify-content:space-between;
+    }
+    .hamburger span {
+      display:block;height:4px;width:100%;background:var(--accent);
+      border-radius:4px;transition:.4s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    .menu {
+      position:fixed;top:0;right:-100%;width:70%;height:100%;
+      background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;
+      transition:.4s ease;z-index:900;
+    }
+    .menu.active{right:0;}
+    .menu a{
+      color:var(--text);text-decoration:none;font-size:2rem;
+      margin:15px 0;font-weight:900;
+    }
+    .menu a:hover{color:gray;}
+    .theme-toggle {
+      margin-top:25px;padding:12px 25px;font-size:1rem;
+      border:none;border-radius:30px;cursor:pointer;
+      background:var(--accent);color:var(--bg);
+      font-weight:900;
+    }
+
+    /* State Page Specific Styles */
+    .state-header {
+      text-align:center;
+      padding:40px 20px;
+      background:var(--card-bg);
+      margin-bottom:30px;
+      border-bottom:3px solid var(--accent);
+    }
+    .state-header h1 {
+      font-size:3.5rem;
+      font-weight:900;
+      margin-bottom:15px;
+    }
+    .state-header p {
+      font-size:1.3rem;
+      font-weight:700;
+      opacity:0.9;
+    }
+
+    .state-content {
+      padding:0 6% 40px;
+    }
+    .state-section {
+      margin-bottom:40px;
+    }
+    .state-section h2 {
+      font-size:2rem;
+      font-weight:900;
+      margin-bottom:20px;
+      color:var(--accent);
+      border-bottom:3px solid var(--accent);
+      padding-bottom:10px;
+      display:inline-block;
+    }
+    .state-section p {
+      font-size:1.1rem;
+      line-height:1.6;
+      margin-bottom:15px;
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:20px;
+      margin:30px 0;
+    }
+    .gallery-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      overflow:hidden;
+      border:2px solid var(--accent);
+      transition:transform 0.3s;
+    }
+    .gallery-card:hover {
+      transform:scale(1.03);
+    }
+    .gallery-card img {
+      width:100%;
+      height:180px;
+      object-fit:cover;
+    }
+    .gallery-card p {
+      padding:15px;
+      font-size:0.9rem;
+      text-align:center;
+    }
+
+    .highlights-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:20px;
+      margin-top:20px;
+    }
+    .highlight-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      padding:20px;
+      border:2px solid var(--accent);
+    }
+    .highlight-card h3 {
+      font-size:1.3rem;
+      margin-bottom:10px;
+      color:var(--accent);
+    }
+
+    .timeline {
+      position:relative;
+      max-width:1200px;
+      margin:40px auto;
+    }
+    .timeline::after {
+      content:'';
+      position:absolute;
+      width:6px;
+      background:var(--accent);
+      top:0;
+      bottom:0;
+      left:50%;
+      margin-left:-3px;
+    }
+    .timeline-item {
+      padding:10px 40px;
+      position:relative;
+      width:50%;
+      box-sizing:border-box;
+    }
+    .timeline-item::after {
+      content:'';
+      position:absolute;
+      width:25px;
+      height:25px;
+      background:var(--card-bg);
+      border:4px solid var(--accent);
+      border-radius:50%;
+      top:15px;
+      z-index:1;
+    }
+    .left {
+      left:0;
+    }
+    .right {
+      left:50%;
+    }
+    .left::after {
+      right:-12px;
+    }
+    .right::after {
+      left:-12px;
+    }
+    .timeline-content {
+      padding:20px 30px;
+      background:var(--card-bg);
+      border:2px solid var(--accent);
+      border-radius:10px;
+    }
+    .timeline-content h3 {
+      margin-bottom:10px;
+      color:var(--accent);
+    }
+
+    .districts-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+      gap:15px;
+      margin-top:20px;
+    }
+    .district-card {
+      background:var(--card-bg);
+      border-radius:10px;
+      padding:15px;
+      border:2px solid var(--accent);
+      text-align:center;
+      transition:transform 0.3s;
+    }
+    .district-card:hover {
+      transform:translateY(-5px);
+    }
+    .district-card h3 {
+      font-size:1.1rem;
+      margin-bottom:5px;
+      color:var(--accent);
+    }
+
+    footer {
+      text-align:center;padding:15px;background:var(--card-bg);
+      font-size:1rem;font-weight:700;
+      margin-top:auto;
+    }
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">GIRIDIH</div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <div class="menu" id="menu">
+    <a href="index.html">Home</a>
+    <a href="jharkhand.html">Jharkhand</a>
+    <a href="giridih.html">Giridih</a>
+    <a href="about.html">About</a>
+    <button class="theme-toggle" id="themeToggle">SWITCH THEME</button>
+  </div>
+
+  <section class="state-header">
+    <h1>GIRIDIH</h1>
+    <p>The Land of Hills • Nature's Abode</p>
+  </section>
+
+  <div class="state-content">
+    <section class="state-section">
+      <h2>INTRODUCTION</h2>
+      <p>Giridih is a picturesque district in the Indian state of Jharkhand, known for its stunning landscapes, lush forests, and rich mineral resources. The name "Giridih" means "Land of Hills" - a fitting description for this region surrounded by rugged terrain and scenic beauty. Giridih was once the headquarters of the Hazaribagh district and became a separate district in 1972.</p>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/SxVq8hGr/image.jpg" alt="Parasnath Hill">
+          <p>Parasnath Hill - Highest peak in Jharkhand</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/cJrqn8Cx/Khandoli.jpg" alt="Khandoli Dam">
+          <p>Khandoli Dam and scenic surroundings</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/x1phnTRW/image.jpg" alt="Usri Falls">
+          <p>Usri Falls - Beautiful waterfall in Giridih</p>
+        </div>
+      </div>
+
+      <p>With a population of over 2.5 million, Giridih is home to diverse communities including tribal populations who have preserved their unique traditions and culture. The district is an important center for mica mining and has significant deposits of other minerals.</p>
+    </section>
+
+    <section class="state-section">
+      <h2>GEOGRAPHY & CLIMATE</h2>
+      <p>Giridih is located on the Chota Nagpur Plateau, characterized by hilly terrain, forests, and numerous rivers. The district shares borders with Jamui, Nawada, Hazaribagh, Dhanbad, and Bokaro districts.</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>AREA</h3>
+          <p>4,854 sq km (8th largest district in Jharkhand)</p>
+        </div>
+        <div class="highlight-card">
+          <h3>ELEVATION</h3>
+          <p>Ranges from 200m to 1,370m (Parasnath Hill summit)</p>
+        </div>
+        <div class="highlight-card">
+          <h3>FOREST COVER</h3>
+          <p>1,156 sq km (23.8% of total area)</p>
+        </div>
+        <div class="highlight-card">
+          <h3>CLIMATE</h3>
+          <p>Humid subtropical with hot summers (March-June), monsoon rains (July-September), and pleasant winters (November-February)</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>SUB-DIVISIONS & BLOCKS</h2>
+      <p>Giridih district is divided into 5 sub-divisions and 13 blocks:</p>
+      
+      <div class="districts-grid">
+        <div class="district-card">
+          <h3>GIRIDIH SADAR</h3>
+          <p>District headquarters with administrative offices</p>
+        </div>
+        <div class="district-card">
+          <h3>BENGABAD</h3>
+          <p>Known for agricultural activities</p>
+        </div>
+        <div class="district-card">
+          <h3>DUMRI</h3>
+          <p>Industrial area with mining activities</p>
+        </div>
+        <div class="district-card">
+          <h3>KHORI MAHUA</h3>
+          <p>Agricultural region with tribal population</p>
+        </div>
+        <div class="district-card">
+          <h3>BAGODAR</h3>
+          <p>Commercial hub of the district</p>
+        </div>
+        <div class="district-card">
+          <h3>BIRNI</h3>
+          <p>Rural area with forest cover</p>
+        </div>
+        <div class="district-card">
+          <h3>GANGANAGAR</h3>
+          <p>Developing residential area</p>
+        </div>
+        <div class="district-card">
+          <h3>PIRTAND</h3>
+          <p>Known for historical significance</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>TOURIST ATTRACTIONS</h2>
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>PARASNATH HILL</h3>
+          <p>Highest peak in Jharkhand (1,370m), sacred Jain pilgrimage site with several temples.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>KHANDOLI DAM</h3>
+          <p>Picturesque reservoir offering water sports, rock climbing, and beautiful sunset views.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>USRI FALLS</h3>
+          <p>Serene three-stream waterfall surrounded by dense forest, perfect for picnics.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>JAIN TEMPLES</h3>
+          <p>Multiple ancient Jain temples on Parasnath Hill, important pilgrimage destination.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>KABIR GUMBAJ</h3>
+          <p>Historical monument with architectural significance from medieval period.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>HARIHAR DHAM</h3>
+          <p>Religious site with a massive Shivalingam, attracting devotees throughout the year.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>MINERAL WEALTH & INDUSTRY</h2>
+      <p>Giridih is rich in mineral resources and has several industries:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>MICA</h3>
+          <p>Giridih is one of India's leading producers of mica, known as the "Mica Capital of India".</p>
+        </div>
+        <div class="highlight-card">
+          <h3>COAL</h3>
+          <p>Significant coal reserves with several mines operating in the district.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>BAUXITE</h3>
+          <p>Substantial deposits of bauxite, the primary ore for aluminum production.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>LIMESTONE</h3>
+          <p>Quality limestone deposits supporting cement manufacturing.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>INDUSTRIES</h3>
+          <p>Mica processing, coal mining, cement production, and small-scale industries.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>HANDLOOM</h3>
+          <p>Traditional handloom industry producing textiles with local designs.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>CULTURE & HERITAGE</h2>
+      <p>Giridih's culture reflects the diverse communities inhabiting the region:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>TRIBAL DANCES</h3>
+          <p>Chhau, Santhal, and other tribal dance forms performed during festivals.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>FESTIVALS</h3>
+          <p>Sarhul, Karma, Chhath Puja, Durga Puja, and Jain pilgrimage festivals.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>HANDICRAFTS</h3>
+          <p>Bamboo crafts, stone carving, and traditional jewelry making.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>CUISINE</h3>
+          <p>Local specialties include Thekua, Dhuska, Rugda (mushroom), and bamboo shoot dishes.</p>
+        </div>
+      </div>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/W1zYWcvS/image.jpg" alt="Tribal Dance">
+          <p>Traditional tribal dance performance</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/mkdNCht4/image.jpg" alt="Handicrafts">
+          <p>Local bamboo and stone handicrafts</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>EDUCATION & RESEARCH</h2>
+      <p>Giridih has several educational institutions providing quality education:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>YOGODA SATSANGA PALI</h3>
+          <p>Famous residential school established by Paramahansa Yogananda.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>GIRIDIH COLLEGE</h3>
+          <p>Premier degree college offering arts, science, and commerce programs.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>ENGINEERING COLLEGES</h3>
+          <p>Several engineering and polytechnic institutions offering technical education.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>RESEARCH CENTERS</h3>
+          <p>Mica research center and agricultural research stations.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>HISTORICAL TIMELINE</h2>
+      <div class="timeline">
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Ancient Period</h3>
+            <p>Region inhabited by tribal communities, part of Magadha empire</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>Medieval Era</h3>
+            <p>Under the rule of various regional kingdoms</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>1765</h3>
+            <p>Comes under British East India Company administration</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>19th Century</h3>
+            <p>Mica mining industry develops under British rule</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>1972</h3>
+            <p>Giridih becomes a separate district on December 6</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>2000</h3>
+            <p>Becomes part of the new state of Jharkhand</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="state-section">
+      <h2>TRANSPORT & CONNECTIVITY</h2>
+      <p>Giridih is well-connected by road and has access to nearby rail networks:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>ROAD NETWORK</h3>
+          <p>Connected via NH19 (GT Road), SH13, and other state highways</p>
+        </div>
+        <div class="highlight-card">
+          <h3>RAIL ACCESS</h3>
+          <p>Parasnath Station (15km) and Hazaribagh Road Station (50km) provide rail connectivity</p>
+        </div>
+        <div class="highlight-card">
+          <h3>AIR ACCESS</h3>
+          <p>Birsa Munda Airport, Ranchi (150km) is the nearest airport</p>
+        </div>
+        <div class="highlight-card">
+          <h3>LOCAL TRANSPORT</h3>
+          <p>Buses, auto-rickshaws, and taxis available for local commute</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    © 2025 Jharkhand Explorer · Insta: <a href="https://instagram.com/zuxoai" target="_blank">@zuxoai</a>
+  </footer>
+
+  <script>
+    const burger=document.getElementById("hamburger");
+    const menu=document.getElementById("menu");
+    burger.addEventListener("click",()=>{
+      burger.classList.toggle("active");
+      menu.classList.toggle("active");
+    });
+    document.querySelectorAll(".menu a").forEach(link=>{
+      link.addEventListener("click",()=>{
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      });
+    });
+    document.addEventListener("click",(e)=>{
+      if(!menu.contains(e.target)&&!burger.contains(e.target)){
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      }
+    });
+    document.getElementById("themeToggle").addEventListener("click",()=>{
+      document.body.classList.toggle("light");
+    });
+  </script>
+</body>
+</html>

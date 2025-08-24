@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bokaro - Jharkhand Explorer</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --card-bg: #111111;
+      --accent: #ffffff;
+      --search-bg: #000000;
+      --search-text: #ffffff;
+      --search-border: #ffffff;
+    }
+    body.light {
+      --bg: #ffffff;
+      --text: #000000;
+      --card-bg: #f2f2f2;
+      --accent: #000000;
+      --search-bg: #ffffff;
+      --search-text: #000000;
+      --search-border: #000000;
+    }
+
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: "Poppins", sans-serif;
+      font-weight:700;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .4s, color .4s;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:15px 25px;
+      background:var(--card-bg);
+      position:sticky;top:0;z-index:1000;
+    }
+    .logo {
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:1px;
+      color:var(--accent);
+      text-transform:uppercase;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      width:35px;cursor:pointer;position:relative;height:25px;
+      display:flex;flex-direction:column;justify-content:space-between;
+    }
+    .hamburger span {
+      display:block;height:4px;width:100%;background:var(--accent);
+      border-radius:4px;transition:.4s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    .menu {
+      position:fixed;top:0;right:-100%;width:70%;height:100%;
+      background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;
+      transition:.4s ease;z-index:900;
+    }
+    .menu.active{right:0;}
+    .menu a{
+      color:var(--text);text-decoration:none;font-size:2rem;
+      margin:15px 0;font-weight:900;
+    }
+    .menu a:hover{color:gray;}
+    .theme-toggle {
+      margin-top:25px;padding:12px 25px;font-size:1rem;
+      border:none;border-radius:30px;cursor:pointer;
+      background:var(--accent);color:var(--bg);
+      font-weight:900;
+    }
+
+    /* District Page Specific Styles */
+    .district-header {
+      text-align:center;
+      padding:40px 20px;
+      background:var(--card-bg);
+      margin-bottom:30px;
+      border-bottom:3px solid var(--accent);
+    }
+    .district-header h1 {
+      font-size:3.5rem;
+      font-weight:900;
+      margin-bottom:15px;
+    }
+    .district-header p {
+      font-size:1.3rem;
+      font-weight:700;
+      opacity:0.9;
+    }
+
+    .district-content {
+      padding:0 6% 40px;
+    }
+    .district-section {
+      margin-bottom:40px;
+    }
+    .district-section h2 {
+      font-size:2rem;
+      font-weight:900;
+      margin-bottom:20px;
+      color:var(--accent);
+      border-bottom:3px solid var(--accent);
+      padding-bottom:10px;
+      display:inline-block;
+    }
+    .district-section p {
+      font-size:1.1rem;
+      line-height:1.6;
+      margin-bottom:15px;
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:20px;
+      margin:30px 0;
+    }
+    .gallery-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      overflow:hidden;
+      border:2px solid var(--accent);
+      transition:transform 0.3s;
+    }
+    .gallery-card:hover {
+      transform:scale(1.03);
+    }
+    .gallery-card img {
+      width:100%;
+      height:180px;
+      object-fit:cover;
+    }
+    .gallery-card p {
+      padding:15px;
+      font-size:0.9rem;
+      text-align:center;
+    }
+
+    .highlights-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:20px;
+      margin-top:20px;
+    }
+    .highlight-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      padding:20px;
+      border:2px solid var(--accent);
+    }
+    .highlight-card h3 {
+      font-size:1.3rem;
+      margin-bottom:10px;
+      color:var(--accent);
+    }
+
+    footer {
+      text-align:center;padding:15px;background:var(--card-bg);
+      font-size:1rem;font-weight:700;
+      margin-top:auto;
+    }
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Jharkhand</div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <div class="menu" id="menu">
+    <a href="index.html">Home</a>
+    <a href="jharkhand.html">Jharkhand</a>
+    <a href="about.html">About</a>
+    <button class="theme-toggle" id="themeToggle">SWITCH THEME</button>
+  </div>
+
+  <section class="district-header">
+    <h1>BOKARO</h1>
+    <p>Steel City of Jharkhand • Industrial Hub</p>
+  </section>
+
+  <div class="district-content">
+    <section class="district-section">
+      <h2>HISTORY & ORIGIN</h2>
+      <p>Bokaro's history is deeply intertwined with India's industrial development. The district was carved out of Dhanbad in 1991 and named after the Bokaro River. Before industrialization, the area was primarily inhabited by tribal communities, particularly the Santhal and Munda tribes, who had lived here for centuries.</p>
+      <p>The region gained prominence in the 1960s with the establishment of Bokaro Steel Plant (BSL), India's first integrated steel plant built with Soviet collaboration. This marked the beginning of Bokaro's transformation from a rural landscape to a major industrial center.</p>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/d1c3nHzf/image.jpg" alt="Bokaro Steel Plant">
+          <p>Bokaro Steel Plant - The industrial backbone</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/QCxXnRSf/image.jpg" alt="Traditional Tribal Village">
+          <p>Traditional Santhal village in Bokaro</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/RFGmfg9K/image.jpg" alt="Bokaro River">
+          <p>The Bokaro River - Namesake of the district</p>
+        </div>
+      </div>
+
+      <p>Archaeological evidence suggests human habitation in the region dating back to the Mesolithic period. The area was part of the Chotanagpur plateau region and was ruled by various tribal chiefs before coming under British control in the 18th century.</p>
+    </section>
+
+    <section class="district-section">
+      <h2>INDUSTRIAL SIGNIFICANCE</h2>
+      <p>Bokaro Steel Plant (BSL), now a unit of Steel Authority of India Limited (SAIL), remains the cornerstone of the district's economy. Spread over 33,045 acres, it was conceptualized in the 1950s and began production in 1972 with Soviet technical assistance.</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>BOKARO STEEL PLANT</h3>
+          <p>Asia's first Swadeshi steel plant with current capacity of 4.5 million tonnes annually. Features state-of-the-art facilities including blast furnaces, coke ovens, and rolling mills.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>INDUSTRIAL GROWTH</h3>
+          <p>Home to over 200 medium and small-scale industries supporting the steel plant. Major industries include refractory, cement, and chemical plants.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>EMPLOYMENT GENERATION</h3>
+          <p>Directly employs over 20,000 workers and indirectly supports over 100,000 jobs in ancillary industries and services.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="district-section">
+      <h2>KEY ATTRACTIONS</h2>
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>JAGANNATH TEMPLE</h3>
+          <p>A modern replica of Puri's Jagannath Temple built by BSL in 1985, featuring beautiful architecture and peaceful surroundings.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>GARGI MANDIR</h3>
+          <p>Ancient temple dedicated to Goddess Gargi, known for its unique architecture and annual Chhath Puja celebrations.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>CITY PARK</h3>
+          <p>Beautifully landscaped park with musical fountains, boating facilities, and a children's play area.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>BOKARO Ispat PUSTAKALAYA</h3>
+          <p>One of the largest industrial township libraries in India with over 50,000 books and periodicals.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>KALI MANDIR</h3>
+          <p>Ancient temple of Goddess Kali located atop a hill, offering panoramic views of the steel city.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>JUBILEE PARK</h3>
+          <p>Well-maintained park with walking tracks, sculptures, and seasonal flower displays.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="district-section">
+      <h2>EDUCATION & RESEARCH</h2>
+      <p>Bokaro has emerged as an important educational hub in Jharkhand:</p>
+      <p><strong>National Institute of Technology (NIT) Bokaro:</strong> Established in 1965 as BIT Sindri, now a premier engineering institute.</p>
+      <p><strong>Bokaro Ispat Vidyalaya:</strong> One of the best CBSE schools in the region with excellent infrastructure.</p>
+      <p><strong>CSIR-CIMFR Regional Centre:</strong> Research center focusing on mining and fuel technology.</p>
+      <p><strong>DPS Bokaro:</strong> Premier educational institution affiliated with Delhi Public School Society.</p>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/VLxxJxM2/image.jpg" alt="NIT Bokaro">
+          <p>NIT Bokaro campus</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/N0YZ4Rd4/image.jpg" alt="DPS Bokaro">
+          <p>DPS Bokaro infrastructure</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="district-section">
+      <h2>DEMOGRAPHICS & CULTURE</h2>
+      <p>Bokaro has a diverse population of approximately 2 million people. The original tribal population coexists with communities from across India who came for industrial employment.</p>
+      <p><strong>Languages:</strong> Hindi (official), Santhali, Bengali, Bhojpuri, and English</p>
+      <p><strong>Festivals:</strong> Sarhul, Karma, Chhath Puja, Durga Puja, and Diwali are celebrated with great enthusiasm</p>
+      <p><strong>Cuisine:</strong> Mix of traditional tribal food (like handia and bamboo shoot dishes) and North Indian cuisine</p>
+      <p><strong>Art Forms:</strong> Traditional tribal dances like Chhau and Jhumair are popular</p>
+    </section>
+
+    <section class="district-section">
+      <h2>HISTORICAL TIMELINE</h2>
+      <p><strong>Prehistoric Era:</strong> Evidence of Mesolithic settlements</p>
+      <p><strong>Medieval Period:</strong> Ruled by local tribal chiefs</p>
+      <p><strong>1765:</strong> Came under British East India Company control</p>
+      <p><strong>1950s:</strong> Selected as site for steel plant</p>
+      <p><strong>1965:</strong> Construction of Bokaro Steel Plant begins</p>
+      <p><strong>1972:</strong> First blast furnace commissioned</p>
+      <p><strong>1991:</strong> Bokaro district officially formed</p>
+      <p><strong>2000:</strong> Became part of newly formed Jharkhand state</p>
+    </section>
+  </div>
+
+  <footer>
+    © 2025 Jharkhand Explorer · Insta: <a href="https://instagram.com/zuxoai" target="_blank">@zuxoai</a>
+  </footer>
+
+  <script>
+    const burger=document.getElementById("hamburger");
+    const menu=document.getElementById("menu");
+    burger.addEventListener("click",()=>{
+      burger.classList.toggle("active");
+      menu.classList.toggle("active");
+    });
+    document.querySelectorAll(".menu a").forEach(link=>{
+      link.addEventListener("click",()=>{
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      });
+    });
+    document.addEventListener("click",(e)=>{
+      if(!menu.contains(e.target)&&!burger.contains(e.target)){
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      }
+    });
+    document.getElementById("themeToggle").addEventListener("click",()=>{
+      document.body.classList.toggle("light");
+    });
+  </script>
+</body>
+</html>

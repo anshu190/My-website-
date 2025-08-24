@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dhanbad - Jharkhand Explorer</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --card-bg: #111111;
+      --accent: #ffffff;
+      --search-bg: #000000;
+      --search-text: #ffffff;
+      --search-border: #ffffff;
+    }
+    body.light {
+      --bg: #ffffff;
+      --text: #000000;
+      --card-bg: #f2f2f2;
+      --accent: #000000;
+      --search-bg: #ffffff;
+      --search-text: #000000;
+      --search-border: #000000;
+    }
+
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: "Poppins", sans-serif;
+      font-weight:700;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .4s, color .4s;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:15px 25px;
+      background:var(--card-bg);
+      position:sticky;top:0;z-index:1000;
+    }
+    .logo {
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:1px;
+      color:var(--accent);
+      text-transform:uppercase;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      width:35px;cursor:pointer;position:relative;height:25px;
+      display:flex;flex-direction:column;justify-content:space-between;
+    }
+    .hamburger span {
+      display:block;height:4px;width:100%;background:var(--accent);
+      border-radius:4px;transition:.4s;
+    }
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+    .menu {
+      position:fixed;top:0;right:-100%;width:70%;height:100%;
+      background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;
+      transition:.4s ease;z-index:900;
+    }
+    .menu.active{right:0;}
+    .menu a{
+      color:var(--text);text-decoration:none;font-size:2rem;
+      margin:15px 0;font-weight:900;
+    }
+    .menu a:hover{color:gray;}
+    .theme-toggle {
+      margin-top:25px;padding:12px 25px;font-size:1rem;
+      border:none;border-radius:30px;cursor:pointer;
+      background:var(--accent);color:var(--bg);
+      font-weight:900;
+    }
+
+    /* District Page Specific Styles */
+    .district-header {
+      text-align:center;
+      padding:40px 20px;
+      background:var(--card-bg);
+      margin-bottom:30px;
+      border-bottom:3px solid var(--accent);
+    }
+    .district-header h1 {
+      font-size:3.5rem;
+      font-weight:900;
+      margin-bottom:15px;
+    }
+    .district-header p {
+      font-size:1.3rem;
+      font-weight:700;
+      opacity:0.9;
+    }
+
+    .district-content {
+      padding:0 6% 40px;
+    }
+    .district-section {
+      margin-bottom:40px;
+    }
+    .district-section h2 {
+      font-size:2rem;
+      font-weight:900;
+      margin-bottom:20px;
+      color:var(--accent);
+      border-bottom:3px solid var(--accent);
+      padding-bottom:10px;
+      display:inline-block;
+    }
+    .district-section p {
+      font-size:1.1rem;
+      line-height:1.6;
+      margin-bottom:15px;
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:20px;
+      margin:30px 0;
+    }
+    .gallery-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      overflow:hidden;
+      border:2px solid var(--accent);
+      transition:transform 0.3s;
+    }
+    .gallery-card:hover {
+      transform:scale(1.03);
+    }
+    .gallery-card img {
+      width:100%;
+      height:180px;
+      object-fit:cover;
+    }
+    .gallery-card p {
+      padding:15px;
+      font-size:0.9rem;
+      text-align:center;
+    }
+
+    .highlights-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:20px;
+      margin-top:20px;
+    }
+    .highlight-card {
+      background:var(--card-bg);
+      border-radius:15px;
+      padding:20px;
+      border:2px solid var(--accent);
+    }
+    .highlight-card h3 {
+      font-size:1.3rem;
+      margin-bottom:10px;
+      color:var(--accent);
+    }
+
+    .timeline {
+      position:relative;
+      max-width:1200px;
+      margin:40px auto;
+    }
+    .timeline::after {
+      content:'';
+      position:absolute;
+      width:6px;
+      background:var(--accent);
+      top:0;
+      bottom:0;
+      left:50%;
+      margin-left:-3px;
+    }
+    .timeline-item {
+      padding:10px 40px;
+      position:relative;
+      width:50%;
+      box-sizing:border-box;
+    }
+    .timeline-item::after {
+      content:'';
+      position:absolute;
+      width:25px;
+      height:25px;
+      background:var(--card-bg);
+      border:4px solid var(--accent);
+      border-radius:50%;
+      top:15px;
+      z-index:1;
+    }
+    .left {
+      left:0;
+    }
+    .right {
+      left:50%;
+    }
+    .left::after {
+      right:-12px;
+    }
+    .right::after {
+      left:-12px;
+    }
+    .timeline-content {
+      padding:20px 30px;
+      background:var(--card-bg);
+      border:2px solid var(--accent);
+      border-radius:10px;
+    }
+    .timeline-content h3 {
+      margin-bottom:10px;
+      color:var(--accent);
+    }
+
+    footer {
+      text-align:center;padding:15px;background:var(--card-bg);
+      font-size:1rem;font-weight:700;
+      margin-top:auto;
+    }
+    footer a{color:var(--accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Jharkhand</div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <div class="menu" id="menu">
+    <a href="index.html">Home</a>
+    <a href="jharkhand.html">Jharkhand</a>
+    <a href="about.html">About</a>
+    <button class="theme-toggle" id="themeToggle">SWITCH THEME</button>
+  </div>
+
+  <section class="district-header">
+    <h1>DHANBAD</h1>
+    <p>Coal Capital of India • The Black Diamond City</p>
+  </section>
+
+  <div class="district-content">
+    <section class="district-section">
+      <h2>HISTORY & ORIGIN</h2>
+      <p>Dhanbad, often referred to as the 'Coal Capital of India', has a rich history dating back to ancient times. The region was originally known as 'Dhanbaid' which translates to 'prosperous forest'. Archaeological evidence suggests human habitation in the area since the Mesolithic period.</p>
+      <p>The district gained prominence during British colonial rule when large-scale coal mining operations began in the late 19th century. The discovery of the Jharia coalfield, one of the largest in India, transformed Dhanbad from a small tribal settlement to a major industrial hub.</p>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/9Q5bmYBy/image.jpg" alt="Old Dhanbad">
+          <p>Dhanbad in early 20th century</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/SxdggzW8/11.jpg" alt="Tribal Heritage">
+          <p>Traditional tribal settlements in Dhanbad</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/RFGmfg9K/image.jpg alt="Damodar River">
+          <p>The Damodar River flowing through Dhanbad</p>
+        </div>
+      </div>
+
+      <p>Before British rule, the area was part of the Manbhum district of Bengal and was inhabited primarily by tribal communities including the Santhal, Munda, and Bhumij tribes. These communities had their own distinct cultures and governance systems that persisted for centuries.</p>
+    </section>
+
+    <section class="district-section">
+      <h2>COAL MINING & INDUSTRIAL SIGNIFICANCE</h2>
+      <p>Dhanbad is synonymous with coal mining in India. The district houses the Jharia coalfield, which contains some of the largest coal reserves in the country and is famous for its high-quality coking coal.</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>JHARIA COALFIELD</h3>
+          <p>Spread over 450 sq km with estimated reserves of 19.4 billion tonnes. Known for its underground fires that have been burning for over a century, creating a unique geological phenomenon.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>COAL INDIA LIMITED</h3>
+          <p>Headquarters of Bharat Coking Coal Limited (BCCL), a subsidiary of Coal India. Employs over 50,000 workers directly in mining operations.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>INDUSTRIAL INFRASTRUCTURE</h3>
+          <p>Home to 112 coal mines, 9 washeries, and numerous ancillary industries. Produces about 30% of India's total coking coal output.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>MINING TECHNOLOGY</h3>
+          <p>Pioneer in introducing advanced mining technologies including longwall mining and continuous miners. Hosts the Central Institute of Mining and Fuel Research (CIMFR).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="district-section">
+      <h2>KEY ATTRACTIONS</h2>
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>MAITHON DAM</h3>
+          <p>Massive dam on the Barakar River with a unique underground power station. Offers boating facilities and scenic views, especially during monsoon.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>TOPCHANCHI LAKE</h3>
+          <p>Serene artificial lake surrounded by hills, perfect for picnics and bird watching. Developed by Tata Steel in 1915 as a water reservoir.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>PANCHET DAM</h3>
+          <p>Another major dam project with beautiful surroundings and water sports facilities. Part of the Damodar Valley Corporation initiative.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>BIRSA MUNDA PARK</h3>
+          <p>Large recreational park dedicated to tribal freedom fighter Birsa Munda. Features sculptures, walking tracks, and cultural displays.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>KALI TEMPLE, GOBINDPUR</h3>
+          <p>Ancient temple dedicated to Goddess Kali, known for its unique architecture and annual festivals.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>BHULBULAIYA HILL</h3>
+          <p>Scenic viewpoint offering panoramic views of Dhanbad city. Popular spot for morning walks and photography.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="district-section">
+      <h2>EDUCATIONAL INSTITUTIONS</h2>
+      <p>Dhanbad is home to some of India's premier educational institutions in mining and engineering:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>INDIAN SCHOOL OF MINES (ISM)</h3>
+          <p>Now IIT Dhanbad - Premier institute for mining education in India. Established in 1926 by British colonial government.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>BIRLA INSTITUTE OF TECHNOLOGY (BIT)</h3>
+          <p>Extension campus of BIT Mesra offering engineering programs. Strong focus on mining and petroleum engineering.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>CENTRAL INSTITUTE OF MINING AND FUEL RESEARCH</h3>
+          <p>CSIR lab focusing on mining safety, coal utilization, and mine planning. Provides crucial research for coal industry.</p>
+        </div>
+      </div>
+      
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/BnbFG8r2/image.jpg" alt="IIT Dhanbad">
+          <p>IIT Dhanbad (formerly ISM) campus</p>
+        </div>
+        <div class="gallery-card">
+          <img src="https://i.postimg.cc/2SxCTTcw/image.jpg" alt="BIT Dhanbad">
+          <p>BIT Mesra Dhanbad extension</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="district-section">
+      <h2>DEMOGRAPHICS & CULTURE</h2>
+      <p>Dhanbad has a population of approximately 2.7 million people with a unique cultural blend of indigenous tribal communities and migrant workers from across India.</p>
+      <p><strong>Languages:</strong> Hindi (official), Bengali, Bhojpuri, Santhali, and English</p>
+      <p><strong>Festivals:</strong> Chhath Puja (most prominent), Durga Puja, Diwali, Sarhul, and Karma</p>
+      <p><strong>Cuisine:</strong> Mix of Bihari, Bengali, and tribal cuisines. Famous for litti-chokha, thekua, and tribal rice beer (handia)</p>
+      <p><strong>Art Forms:</strong> Chhau dance, Jhumair, tribal folk music, and mining work songs</p>
+    </section>
+
+    <section class="district-section">
+      <h2>TRANSPORT & CONNECTIVITY</h2>
+      <p>Dhanbad is well-connected to major Indian cities through various modes of transportation:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>RAILWAYS</h3>
+          <p>Dhanbad Junction is one of the busiest railway stations in India. Headquarters of Dhanbad Railway Division under East Central Railway. Connected to all major cities via numerous express trains.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>ROADWAYS</h3>
+          <p>Well-connected via NH18 (Dhanbad-Bokaro) and NH19 (Grand Trunk Road). State highways connect to nearby cities like Ranchi, Patna, and Asansol.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>AIRPORT</h3>
+          <p>Dhanbad Airport (domestic) with limited operations. Nearest international airport is Birsa Munda Airport, Ranchi (170 km away).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="district-section">
+      <h2>HISTORICAL TIMELINE</h2>
+      <div class="timeline">
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Prehistoric Era</h3>
+            <p>Evidence of Mesolithic settlements in the region</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>Medieval Period</h3>
+            <p>Part of Manbhum kingdom, inhabited by tribal communities</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>1765</h3>
+            <p>Area came under British East India Company control</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>1894</h3>
+            <p>First commercial coal mining operations begin in Jharia</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>1926</h3>
+            <p>Indian School of Mines established in Dhanbad</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>1956</h3>
+            <p>Dhanbad becomes a separate district</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>2000</h3>
+            <p>Becomes part of newly formed Jharkhand state</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>2016</h3>
+            <p>Indian School of Mines upgraded to IIT status</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="district-section">
+      <h2>ENVIRONMENTAL CHALLENGES</h2>
+      <p>Dhanbad faces several environmental issues primarily related to coal mining:</p>
+      
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <h3>UNDERGROUND FIRES</h3>
+          <p>Jharia coalfield has been burning underground for over 100 years, causing land subsidence and air pollution. Government has initiated relocation plans for affected residents.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>LAND DEGRADATION</h3>
+          <p>Mining activities have degraded over 150 sq km of land. Reclamation projects underway to restore mined areas.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>WATER POLLUTION</h3>
+          <p>Mine drainage and industrial effluents have polluted local water sources. Treatment plants being installed to address this.</p>
+        </div>
+        <div class="highlight-card">
+          <h3>GREEN INITIATIVES</h3>
+          <p>Afforestation projects, mine reclamation, and promotion of renewable energy to balance industrial growth.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    © 2025 Jharkhand Explorer · Insta: <a href="https://instagram.com/zuxoai" target="_blank">@zuxoai</a>
+  </footer>
+
+  <script>
+    const burger=document.getElementById("hamburger");
+    const menu=document.getElementById("menu");
+    burger.addEventListener("click",()=>{
+      burger.classList.toggle("active");
+      menu.classList.toggle("active");
+    });
+    document.querySelectorAll(".menu a").forEach(link=>{
+      link.addEventListener("click",()=>{
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      });
+    });
+    document.addEventListener("click",(e)=>{
+      if(!menu.contains(e.target)&&!burger.contains(e.target)){
+        burger.classList.remove("active");
+        menu.classList.remove("active");
+      }
+    });
+    document.getElementById("themeToggle").addEventListener("click",()=>{
+      document.body.classList.toggle("light");
+    });
+  </script>
+</body>
+</html>
