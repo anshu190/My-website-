@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incredible India</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: #000;
+      color: #fff;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid #444;
+      position: sticky;
+      top: 0;
+      background: #000;
+      z-index: 999;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    body.light header {
+      background: #fff;
+      border-color: #ccc;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #ff9933; /* Saffron color from Indian flag */
+    }
+
+    body.light .logo {
+      color: #138808; /* Green color from Indian flag */
+    }
+
+    /* Hamburger Button */
+    .hamburger {
+      width: 30px;
+      height: 24px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      background: #fff;
+      position: absolute;
+      height: 3px;
+      width: 100%;
+      left: 0;
+      transition: 0.3s;
+      border-radius: 3px;
+    }
+
+    .hamburger span:nth-child(1) {
+      top: 0;
+    }
+    .hamburger span:nth-child(2) {
+      top: 10px;
+    }
+    .hamburger span:nth-child(3) {
+      top: 20px;
+    }
+
+    /* Animation for Open */
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg);
+      top: 10px;
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg);
+      top: 10px;
+    }
+
+    /* Menu */
+    .menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 70%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 60px 20px;
+      transition: right 0.4s ease;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .menu.active {
+      right: 0;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #fff;
+      padding: 15px 0;
+      font-size: 1.2rem;
+      border-bottom: 1px solid #444;
+      transition: color 0.3s;
+    }
+
+    .menu a:hover {
+      color: #ff9933;
+    }
+
+    .theme-toggle {
+      margin-top: 20px;
+      padding: 10px;
+      background: #111;
+      border: 1px solid #444;
+      cursor: pointer;
+      text-align: center;
+      border-radius: 4px;
+    }
+
+    /* Search Box */
+    .search-container {
+      padding: 15px 20px;
+      background: #111;
+      position: sticky;
+      top: 60px;
+      z-index: 99;
+      transition: background 0.3s;
+    }
+
+    body.light .search-container {
+      background: #f5f5f5;
+    }
+
+    #stateSearch {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 25px;
+      border: 1px solid #444;
+      background: #222;
+      color: #fff;
+      outline: none;
+    }
+
+    body.light #stateSearch {
+      background: #fff;
+      color: #000;
+      border-color: #ccc;
+    }
+
+    /* States Section */
+    .states-container {
+      padding: 20px;
+    }
+    
+    .state {
+      margin-bottom: 30px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .state:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+    }
+
+    body.light .state:hover {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .state-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .state:hover .state-image {
+      transform: scale(1.05);
+    }
+    
+    .state-info {
+      padding: 15px;
+    }
+    
+    .state-title {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: #ff9933;
+    }
+
+    body.light .state-title {
+      color: #138808;
+    }
+    
+    .state-link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: #ff9933;
+      color: #000;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .state-link:hover {
+      background: #e5892a;
+    }
+
+    body.light .state-link {
+      background: #138808;
+      color: #fff;
+    }
+
+    body.light .state-link:hover {
+      background: #0f7006;
+    }
+
+    /* No results message */
+    .no-results {
+      text-align: center;
+      padding: 30px;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #444;
+      margin-top: 30px;
+    }
+
+    body.light footer {
+      border-color: #ccc;
+    }
+
+    /* Light Mode */
+    body.light {
+      background: #fff;
+      color: #000;
+    }
+    body.light .hamburger span {
+      background: #000;
+    }
+    body.light .menu {
+      background: #fff;
+      color: #000;
+      border-left: 1px solid #ccc;
+    }
+    body.light .menu a {
+      color: #000;
+      border-bottom: 1px solid #ccc;
+    }
+    body.light .menu a:hover {
+      color: #138808;
+    }
+    body.light .theme-toggle {
+      background: #eee;
+      border: 1px solid #ccc;
+      color: #000;
+    }
+    body.light .state {
+      border-color: #ccc;
+    }
+
+    /* Scroll to top button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ff9933;
+      color: #000;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s, background 0.3s;
+      z-index: 99;
+    }
+
+    .scroll-to-top.visible {
+      opacity: 1;
+    }
+
+    .scroll-to-top:hover {
+      background: #e5892a;
+    }
+
+    body.light .scroll-to-top {
+      background: #138808;
+      color: #fff;
+    }
+
+    body.light .scroll-to-top:hover {
+      background: #0f7006;
+    }
+
+    /* Responsive adjustments */
+    @media (min-width: 768px) {
+      .states-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .states-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .menu {
+        width: 30%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">INCREDIBLE INDIA</div>
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <div class="search-container">
+    <input type="text" id="stateSearch" placeholder="Search states and union territories...">
+  </div>
+
+  <div class="menu" id="menu">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="#">Services</a>
+    <div class="theme-toggle" id="themeToggle">Toggle Theme</div>
+  </div>
+
+  <div class="states-container">
+
+    <!-- Andhra Pradesh -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Andhra+Pradesh" alt="Andhra Pradesh" class="state-image" data-state="Andhra+Pradesh">
+      <div class="state-info">
+        <h2 class="state-title">Andhra Pradesh</h2>
+        <p>Known for Tirupati Temple, Visakhapatnam beaches, and rich culture.</p>
+        <a href="andhra-pradesh.html" class="state-link">Explore Andhra Pradesh</a>
+      </div>
+    </div>
+    
+<!-- Arunachal Pradesh -->
+<div class="state">
+  <img src="https://placehold.co/600x400/000/fff?text=Arunachal+Pradesh" alt="Arunachal Pradesh" class="state-image" data-state="Arunachal+Pradesh">
+  <div class="state-info">
+    <h2 class="state-title">Arunachal Pradesh</h2>
+    <p>Known as the "Land of the Rising Sun", famous for Tawang Monastery and stunning landscapes.</p>
+    <a href="arunachal-pradesh.html" class="state-link">Explore Arunachal Pradesh</a>
+  </div>
+</div>
+
+    <!-- Assam -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Assam" alt="Assam" class="state-image" data-state="Assam">
+      <div class="state-info">
+        <h2 class="state-title">Assam</h2>
+        <p>Known for tea gardens, Kaziranga National Park, and Brahmaputra river.</p>
+        <a href="assam.html" class="state-link">Explore Assam</a>
+      </div>
+    </div>
+
+    <!-- Bihar -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Bihar" alt="Bihar" class="state-image" data-state="Bihar">
+      <div class="state-info">
+        <h2 class="state-title">Bihar</h2>
+        <p>Land of Nalanda, Bodh Gaya, and rich ancient history.</p>
+        <a href="bihar.html" class="state-link">Explore Bihar</a>
+      </div>
+    </div>
+
+    <!-- Chhattisgarh -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Chhattisgarh" alt="Chhattisgarh" class="state-image" data-state="Chhattisgarh">
+      <div class="state-info">
+        <h2 class="state-title">Chhattisgarh</h2>
+        <p>Known for forests, waterfalls, and tribal culture.</p>
+        <a href="chhattisgarh.html" class="state-link">Explore Chhattisgarh</a>
+      </div>
+    </div>
+
+    <!-- Goa -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Goa" alt="Goa" class="state-image" data-state="Goa">
+      <div class="state-info">
+        <h2 class="state-title">Goa</h2>
+        <p>Beautiful beaches, vibrant nightlife, and Portuguese heritage.</p>
+        <a href="goa.html" class="state-link">Explore Goa</a>
+      </div>
+    </div>
+
+    <!-- Gujarat -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Gujarat" alt="Gujarat" class="state-image" data-state="Gujarat">
+      <div class="state-info">
+        <h2 class="state-title">Gujarat</h2>
+        <p>Statue of Unity, Gir National Park, and cultural heritage.</p>
+        <a href="gujarat.html" class="state-link">Explore Gujarat</a>
+      </div>
+    </div>
+
+    <!-- Haryana -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Haryana" alt="Haryana" class="state-image" data-state="Haryana">
+      <div class="state-info">
+        <h2 class="state-title">Haryana</h2>
+        <p>Gurugram IT hub, Kurukshetra, and rich agriculture.</p>
+        <a href="haryana.html" class="state-link">Explore Haryana</a>
+      </div>
+    </div>
+
+    <!-- Himachal Pradesh -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Himachal+Pradesh" alt="Himachal Pradesh" class="state-image" data-state="Himachal+Pradesh">
+      <div class="state-info">
+        <h2 class="state-title">Himachal Pradesh</h2>
+        <p>Snowy mountains, Shimla, Manali, Dharamshala.</p>
+        <a href="himachal-pradesh.html" class="state-link">Explore Himachal Pradesh</a>
+      </div>
+    </div>
+
+    <!-- Jharkhand -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Jharkhand" alt="Jharkhand" class="state-image" data-state="Jharkhand">
+      <div class="state-info">
+        <h2 class="state-title">Jharkhand</h2>
+        <p>Waterfalls, forests, Ranchi & Deoghar temples.</p>
+        <a href="jharkhand.html" class="state-link">Explore Jharkhand</a>
+      </div>
+    </div>
+
+    <!-- Karnataka -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Karnataka" alt="Karnataka" class="state-image" data-state="Karnataka">
+      <div class="state-info">
+        <h2 class="state-title">Karnataka</h2>
+        <p>Bengaluru tech hub, Mysuru palaces, and Hampi ruins.</p>
+        <a href="karnataka.html" class="state-link">Explore Karnataka</a>
+      </div>
+    </div>
+
+    <!-- Kerala -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Kerala" alt="Kerala" class="state-image" data-state="Kerala">
+      <div class="state-info">
+        <h2 class="state-title">Kerala</h2>
+        <p>"God's Own Country" with backwaters, greenery, and Ayurveda.</p>
+        <a href="kerala.html" class="state-link">Explore Kerala</a>
+      </div>
+    </div>
+
+    <!-- Madhya Pradesh -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Madhya+Pradesh" alt="Madhya Pradesh" class="state-image" data-state="Madhya+Pradesh">
+      <div class="state-info">
+        <h2 class="state-title">Madhya Pradesh</h2>
+        <p>Khajuraho temples, wildlife parks, and Indore.</p>
+        <a href="madhya-pradesh.html" class="state-link">Explore Madhya Pradesh</a>
+      </div>
+    </div>
+
+    <!-- Maharashtra -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Maharashtra" alt="Maharashtra" class="state-image" data-state="Maharashtra">
+      <div class="state-info">
+        <h2 class="state-title">Maharashtra</h2>
+        <p>Mumbai, Bollywood, Ajanta Ellora caves, and beaches.</p>
+        <a href="maharashtra.html" class="state-link">Explore Maharashtra</a>
+      </div>
+    </div>
+
+    <!-- Manipur -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Manipur" alt="Manipur" class="state-image" data-state="Manipur">
+      <div class="state-info">
+        <h2 class="state-title">Manipur</h2>
+        <p>Imphal, Loktak Lake, and cultural festivals.</p>
+        <a href="manipur.html" class="state-link">Explore Manipur</a>
+      </div>
+    </div>
+
+    <!-- Meghalaya -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Meghalaya" alt="Meghalaya" class="state-image" data-state="Meghalaya">
+      <div class="state-info">
+        <h2 class="state-title">Meghalaya</h2>
+        <p>Shillong, living root bridges, Cherrapunji rainfall.</p>
+        <a href="meghalaya.html" class="state-link">Explore Meghalaya</a>
+      </div>
+    </div>
+
+    <!-- Mizoram -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Mizoram" alt="Mizoram" class="state-image" data-state="Mizoram">
+      <div class="state-info">
+        <h2 class="state-title">Mizoram</h2>
+        <p>Aizawl city, lush hills, and tribal culture.</p>
+        <a href="mizoram.html" class="state-link">Explore Mizoram</a>
+      </div>
+    </div>
+
+    <!-- Nagaland -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Nagaland" alt="Nagaland" class="state-image" data-state="Nagaland">
+      <div class="state-info">
+        <h2 class="state-title">Nagaland</h2>
+        <p>Kohima, Hornbill Festival, and scenic hills.</p>
+        <a href="nagaland.html" class="state-link">Explore Nagaland</a>
+      </div>
+    </div>
+
+    <!-- Odisha -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Odisha" alt="Odisha" class="state-image" data-state="Odisha">
+      <div class="state-info">
+        <h2 class="state-title">Odisha</h2>
+        <p>Puri Jagannath, Konark Sun Temple, and beaches.</p>
+        <a href="odisha.html" class="state-link">Explore Odisha</a>
+      </div>
+    </div>
+
+    <!-- Punjab -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Punjab" alt="Punjab" class="state-image" data-state="Punjab">
+      <div class="state-info">
+        <h2 class="state-title">Punjab</h2>
+        <p>Golden Temple, Amritsar, and Punjabi culture.</p>
+        <a href="punjab.html" class="state-link">Explore Punjab</a>
+      </div>
+    </div>
+
+    <!-- Rajasthan -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Rajasthan" alt="Rajasthan" class="state-image" data-state="Rajasthan">
+      <div class="state-info">
+        <h2 class="state-title">Rajasthan</h2>
+        <p>Land of kings, forts, palaces, and the Thar desert.</p>
+        <a href="rajasthan.html" class="state-link">Explore Rajasthan</a>
+      </div>
+    </div>
+
+    <!-- Sikkim -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Sikkim" alt="Sikkim" class="state-image" data-state="Sikkim">
+      <div class="state-info">
+        <h2 class="state-title">Sikkim</h2>
+        <p>Gangtok, Kanchenjunga, and scenic landscapes.</p>
+        <a href="sikkim.html" class="state-link">Explore Sikkim</a>
+      </div>
+    </div>
+
+    <!-- Tamil Nadu -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Tamil+Nadu" alt="Tamil Nadu" class="state-image" data-state="Tamil+Nadu">
+      <div class="state-info">
+        <h2 class="state-title">Tamil Nadu</h2>
+        <p>Temples, Chennai, and classical music culture.</p>
+        <a href="tamil-nadu.html" class="state-link">Explore Tamil Nadu</a>
+      </div>
+    </div>
+
+    <!-- Telangana -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Telangana" alt="Telangana" class="state-image" data-state="Telangana">
+      <div class="state-info">
+        <h2 class="state-title">Telangana</h2>
+        <p>Hyderabad, Charminar, and Golconda Fort.</p>
+        <a href="telangana.html" class="state-link">Explore Telangana</a>
+      </div>
+    </div>
+
+    <!-- Tripura -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Tripura" alt="Tripura" class="state-image" data-state="Tripura">
+      <div class="state-info">
+        <h2 class="state-title">Tripura</h2>
+        <p>Agartala, Ujjayanta Palace, and natural beauty.</p>
+        <a href="tripura.html" class="state-link">Explore Tripura</a>
+      </div>
+    </div>
+
+    <!-- Uttar Pradesh -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Uttar+Pradesh" alt="Uttar Pradesh" class="state-image" data-state="Uttar+Pradesh">
+      <div class="state-info">
+        <h2 class="state-title">Uttar Pradesh</h2>
+        <p>Taj Mahal, Varanasi ghats, and Ayodhya temples.</p>
+        <a href="uttar-pradesh.html" class="state-link">Explore Uttar Pradesh</a>
+      </div>
+    </div>
+
+    <!-- Uttarakhand -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Uttarakhand" alt="Uttarakhand" class="state-image" data-state="Uttarakhand">
+      <div class="state-info">
+        <h2 class="state-title">Uttarakhand</h2>
+        <p>Rishikesh, Haridwar, Nainital, and mountains.</p>
+        <a href="uttarakhand.html" class="state-link">Explore Uttarakhand</a>
+      </div>
+    </div>
+
+    <!-- West Bengal -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=West+Bengal" alt="West Bengal" class="state-image" data-state="West+Bengal">
+      <div class="state-info">
+        <h2 class="state-title">West Bengal</h2>
+        <p>Kolkata, Darjeeling tea, and Sundarbans mangroves.</p>
+        <a href="west-bengal.html" class="state-link">Explore West Bengal</a>
+      </div>
+    </div>
+
+    <!-- UTs -->
+
+    <!-- Andaman and Nicobar -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Andaman+%26+Nicobar" alt="Andaman" class="state-image" data-state="Andaman+%26+Nicobar">
+      <div class="state-info">
+        <h2 class="state-title">Andaman & Nicobar Islands</h2>
+        <p>Beaches, Port Blair, and cellular jail.</p>
+        <a href="andaman.html" class="state-link">Explore Andaman</a>
+      </div>
+    </div>
+
+    <!-- Chandigarh -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Chandigarh" alt="Chandigarh" class="state-image" data-state="Chandigarh">
+      <div class="state-info">
+        <h2 class="state-title">Chandigarh</h2>
+        <p>Planned city, Rock Garden, shared capital.</p>
+        <a href="chandigarh.html" class="state-link">Explore Chandigarh</a>
+      </div>
+    </div>
+
+    <!-- Dadra & Nagar Haveli -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Dadra+%26+Nagar+Haveli" alt="Dadra" class="state-image" data-state="Dadra+%26+Nagar+Haveli">
+      <div class="state-info">
+        <h2 class="state-title">Dadra & Nagar Haveli & Daman & Diu</h2>
+        <p>Beaches, forts, and Portuguese history.</p>
+        <a href="dadra.html" class="state-link">Explore UT</a>
+      </div>
+    </div>
+
+    <!-- Delhi -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Delhi" alt="Delhi" class="state-image" data-state="Delhi">
+      <div class="state-info">
+        <h2 class="state-title">Delhi</h2>
+        <p>Capital city, India Gate, Red Fort, Qutub Minar.</p>
+        <a href="delhi.html" class="state-link">Explore Delhi</a>
+      </div>
+    </div>
+
+    <!-- Jammu & Kashmir -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Jammu+%26+Kashmir" alt="Jammu & Kashmir" class="state-image" data-state="Jammu+%26+Kashmir">
+      <div class="state-info">
+        <h2 class="state-title">Jammu & Kashmir</h2>
+        <p>Srinagar, Gulmarg, Dal Lake, snow peaks.</p>
+        <a href="jammu-kashmir.html" class="state-link">Explore Jammu & Kashmir</a>
+      </div>
+    </div>
+
+    <!-- Ladakh -->
+    <div class="state">
+      <img src="https://placehold.co/600x400/000/fff?text=Ladakh" alt="Ladakh" class="state-image" data-state="Ladakh">
+      <div class="state-info">
+        <h2 class="state-title">Ladakh</h2>
+        <p>Beautiful nature, snow peaks.</p>
+        <a href="Ladakh.html" class="state-link">Explore Ladakh</a>
+      </div>
+    </div>
+    
+    <!-- No results message -->
+    <div class="no-results" id="noResults">
+      <h2>No states or union territories found</h2>
+      <p>Try a different search term</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2023 Incredible India. All rights reserved.</p>
+  </footer>
+
+  <div class="scroll-to-top" id="scrollToTop">↑</div>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const menu = document.getElementById('menu');
+    const themeToggle = document.getElementById('themeToggle');
+    const stateSearch = document.getElementById('stateSearch');
+    const statesContainer = document.querySelector('.states-container');
+    const states = document.querySelectorAll('.state');
+    const noResults = document.getElementById('noResults');
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    const body = document.body;
+    const stateImages = document.querySelectorAll('.state-image');
+
+    // Open/Close Menu
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      menu.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (event) => {
+      const isClickInsideMenu = menu.contains(event.target);
+      const isClickOnHamburger = hamburger.contains(event.target);
+      
+      if (!isClickInsideMenu && !isClickOnHamburger && menu.classList.contains('active')) {
+        hamburger.classList.remove('active');
+        menu.classList.remove('active');
+      }
+    });
+
+    // Close menu when pressing Escape key
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.classList.contains('active')) {
+        hamburger.classList.remove('active');
+        menu.classList.remove('active');
+      }
+    });
+
+    // Update placeholder images based on theme
+    function updateImages(isLight) {
+      stateImages.forEach(img => {
+        const stateName = img.getAttribute('data-state');
+        if (isLight) {
+          // Light theme: white background, black text
+          img.src = `https://placehold.co/600x400/fff/000?text=${stateName}`;
+        } else {
+          // Dark theme: black background, white text
+          img.src = `https://placehold.co/600x400/000/fff?text=${stateName}`;
+        }
+      });
+    }
+
+    // Toggle Theme
+    themeToggle.addEventListener('click', () => {
+      const isLight = body.classList.toggle('light');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      updateImages(isLight);
+    });
+
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      body.classList.add('light');
+      updateImages(true);
+    }
+
+    // Search functionality
+    stateSearch.addEventListener('input', () => {
+      const searchTerm = stateSearch.value.toLowerCase();
+      let resultsFound = 0;
+      
+      states.forEach(state => {
+        const title = state.querySelector('.state-title').textContent.toLowerCase();
+        const description = state.querySelector('p').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+          state.style.display = 'block';
+          resultsFound++;
+        } else {
+          state.style.display = 'none';
+        }
+      });
+      
+      // Show no results message if needed
+      noResults.style.display = resultsFound === 0 ? 'block' : 'none';
+    });
+
+    // Scroll to top functionality
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add('visible');
+      } else {
+        scrollToTopBtn.classList.remove('visible');
+      }
+    });
+
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Initialize images on page load
+    updateImages(body.classList.contains('light'));
+  </script>
+</body>
+</html>
